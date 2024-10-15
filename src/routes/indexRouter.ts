@@ -1,21 +1,38 @@
 import express from 'express';
 import passport from 'passport';
+import * as userController from '../controllers/userController';
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  res.send('<h1>Home</h1><a href="/login">Login</a>');
+  if (req.isAuthenticated && req.isAuthenticated()) {
+    res.send(
+      `<h1>Home to ${req.user.username}!</h1><a href="/profile">Profile</a>`,
+    );
+  } else {
+    res.send(
+      '<h1>Home</h1><a href="/login">Login</a><a href="/register">Register</a>',
+    );
+  }
 });
 
 router.get('/login', (req, res) => {
+  const errors = req.session.messages ? [...req.session.messages] : null;
+  req.session.messages = undefined;
+  res.render('login', { errors });
+});
+
+router.get('/register', (req, res) => {
   res.send(`
-    <form method="post" action="/login">
+    <form method="post" action="/register">
       <div><label>Username:</label><input type="text" name="username" /></div>
       <div><label>Password:</label><input type="password" name="password" /></div>
-      <div><button type="submit">Log In</button></div>
+      <div><button type="submit">Register</button></div>
     </form>
   `);
 });
+
+router.post('/register', userController.registerUserPost);
 
 router.post('/login', [
   (req, res, next) => {
@@ -23,8 +40,9 @@ router.post('/login', [
     next();
   },
   passport.authenticate('local', {
-    successRedirect: '/profile',
+    successRedirect: '/',
     failureRedirect: '/login',
+    failureMessage: true,
   }),
 ]);
 

@@ -8,6 +8,7 @@ import passport from 'passport';
 import expressSession from 'express-session';
 import connectPg from 'connect-pg-simple';
 import pool from './db/pool';
+import path from 'path';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,8 +16,6 @@ const PORT = process.env.PORT || 3000;
 if (!process.env.SESSION_SECRET) {
   throw Error('Session Secret must exist to continue');
 }
-
-// TODO: init db tables -- ie create users table (if not exists) for prod
 
 app.use(express.urlencoded({ extended: false }));
 app.use(
@@ -42,14 +41,16 @@ app.use(passport.session());
 
 app.use((req, res, next) => {
   // debugging info
-  console.log('DEBUG-->');
+  console.log('\n\n--------DEBUG----------');
   console.log('session:', req.session);
   console.log('user:', req.user);
   console.log('isAuth:', req.isAuthenticated());
-  console.log('<--DEBUG');
+  console.log('--------DEBUG----------\n\n');
   next();
 });
 
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 app.use('/', indexRouter);
 
 app.listen(PORT, () => {

@@ -1,41 +1,51 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
-import pool from '../db/pool';
+import * as db from '../db/queries';
+import { validPassword } from '../lib/passwordUtils';
 
 export interface User {
+  id: number;
   username: string;
-  password: string;
+  hash: string;
+  salt: string;
+  admin: boolean;
 }
-
-// User database simulation
-const users: User[] = [];
-users.push({ username: 'test', password: '123' });
 
 // Passport local strategy
 passport.use(
-  new LocalStrategy((username: string, password: string, done: Function) => {
-    console.log('using local strategy');
-    console.log('username: ', username);
-    console.log('password: ', password);
-    const user = users.find((user) => user.username === username);
-    if (!user) {
-      return done(null, false, { message: 'Incorrect username.' });
-    }
-    if (user.password !== password) {
-      return done(null, false, { message: 'Incorrect password.' });
-    }
-    return done(null, user);
-  }),
+  new LocalStrategy(
+    async (username: string, password: string, done: Function) => {
+      try {
+        console.log('----using local strategy----');
+        const user = await db.getUser(username);
+        if (!user) {
+          console.log('incorrect username');
+          return done(null, false, { message: 'Incorrect username.' });
+        }
+        if (!validPassword(password, user.hash, user.salt)) {
+          console.log('invalid password');
+          return done(null, false, { message: 'Incorrect password.' });
+        }
+        return done(null, user);
+      } catch (error) {
+        return done(error);
+      }
+    },
+  ),
 );
 
 // Serialize and deserialize user
 passport.serializeUser((user: User, done: Function) => {
   console.log('seralizing user');
-  done(null, user.username);
+  done(null, user.id);
 });
 
-passport.deserializeUser((username: string, done: Function) => {
+passport.deserializeUser(async (userId: number, done: Function) => {
   console.log('deseralizing user');
-  const user = users.find((user) => user.username === username);
-  done(null, user);
+  try {
+    const user = await db.getUserById(userId);
+    done(null, user);
+  } catch (error) {
+    done(error);
+  }
 });

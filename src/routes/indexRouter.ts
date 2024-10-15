@@ -6,13 +6,10 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
   if (req.isAuthenticated && req.isAuthenticated()) {
-    res.send(
-      `<h1>Home to ${req.user.username}!</h1><a href="/profile">Profile</a>`,
-    );
+    console.log('is auth');
+    res.render('index', { username: req.user.username });
   } else {
-    res.send(
-      '<h1>Home</h1><a href="/login">Login</a><a href="/register">Register</a>',
-    );
+    res.render('index');
   }
 });
 
@@ -42,15 +39,16 @@ router.post('/login', [
   }),
 ]);
 
+router.post('/member', userController.memberPost);
+
 router.get('/profile', (req, res) => {
   if (!req.isAuthenticated()) {
-    console.log('profile is not authenticated');
     return res.redirect('/login');
   }
-  console.log(req.user);
-  res.send(
-    `<h1>Hello, ${req.user?.username} </h1><a href="/logout">Logout</a>`,
-  );
+  res.render('profile', {
+    username: req.user.username,
+    isMember: req.user.member,
+  });
 });
 
 router.get('/logout', (req, res) => {

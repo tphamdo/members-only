@@ -6,6 +6,7 @@ const SQL = `
   username VARCHAR(255) NOT NULL,
   hash VARCHAR(255) NOT NULL,
   salt VARCHAR(255) NOT NULL,
+  member BOOLEAN NOT NULL DEFAULT false,
   admin BOOLEAN NOT NULL DEFAULT false);
 `;
 

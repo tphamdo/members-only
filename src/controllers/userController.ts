@@ -29,3 +29,14 @@ export async function registerUserPost(req: Request, res: Response) {
     return res.redirect('/register');
   }
 }
+
+export async function memberPost(req: Request, res: Response) {
+  console.log('---------memberPut----');
+  console.log(req.user);
+  console.log(req.body);
+  console.log('---------memberPut----');
+  if (req.body.password && req.body.password === 'secret') {
+    db.makeMember(req.user.id);
+  }
+  res.redirect('/profile');
+}

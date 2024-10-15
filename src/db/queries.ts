@@ -45,3 +45,13 @@ export async function getUserById(userId: number) {
     );
   return rows.length ? rows[0] : undefined;
 }
+
+export async function makeMember(userId: number) {
+  const SQL = `
+    UPDATE users
+    SET member = true
+    WHERE users.id = $1;
+  `;
+
+  await pool.query(SQL, [userId]);
+}

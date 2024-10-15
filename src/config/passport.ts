@@ -8,6 +8,7 @@ export interface User {
   username: string;
   hash: string;
   salt: string;
+  member: boolean;
   admin: boolean;
 }
 

@@ -10,7 +10,12 @@ export async function addUser(user: {
     VALUES ($1, $2, $3);
   `;
 
-  await pool.query(SQL, [user.username, user.hash, user.salt]);
+  const existingUser = await getUser(user.username);
+  if (existingUser) throw Error('That username already exists');
+
+  const rows = await pool.query(SQL, [user.username, user.hash, user.salt]);
+  console.log('AU:', rows);
+  console.log('AU:', rows.rows);
 }
 
 export async function getUser(username: string) {

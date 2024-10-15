@@ -23,19 +23,15 @@ router.get('/login', (req, res) => {
 });
 
 router.get('/register', (req, res) => {
-  res.send(`
-    <form method="post" action="/register">
-      <div><label>Username:</label><input type="text" name="username" /></div>
-      <div><label>Password:</label><input type="password" name="password" /></div>
-      <div><button type="submit">Register</button></div>
-    </form>
-  `);
+  const errors = req.session.messages ? [...req.session.messages] : null;
+  req.session.messages = undefined;
+  res.render('register', { errors });
 });
 
 router.post('/register', userController.registerUserPost);
 
 router.post('/login', [
-  (req, res, next) => {
+  (req, res, next: Function) => {
     console.log('login post');
     next();
   },
@@ -58,8 +54,9 @@ router.get('/profile', (req, res) => {
 });
 
 router.get('/logout', (req, res) => {
-  req.logout(() => {});
-  res.redirect('/');
+  req.logout(() => {
+    res.redirect('/');
+  });
 });
 
 export default router;

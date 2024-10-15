@@ -7,11 +7,25 @@ export async function registerUserPost(req: Request, res: Response) {
 
   const hashedPassword = genPassword(req.body.password);
 
-  db.addUser({
-    username: req.body.username,
-    hash: hashedPassword.hash,
-    salt: hashedPassword.salt,
-  });
+  try {
+    await db.addUser({
+      username: req.body.username,
+      hash: hashedPassword.hash,
+      salt: hashedPassword.salt,
+    });
 
-  res.redirect('/login');
+    const user = await db.getUser(req.body.username);
+    req.login(user, (err) => {
+      if (err) {
+        console.error(err);
+        req.session.messages = [err.message];
+        return res.redirect('/register');
+      }
+      return res.redirect('/');
+    });
+  } catch (error) {
+    console.error(error);
+    req.session.messages = [error.message];
+    return res.redirect('/register');
+  }
 }

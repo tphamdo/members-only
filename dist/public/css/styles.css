@@ -1,0 +1,207 @@
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+body {
+  margin: 2rem;
+  font:
+    1rem/1.4 system-ui,
+    sans-serif;
+  display: flex;
+  justify-content: center;
+  background-color: black;
+  color: white;
+}
+
+.bodyContainer {
+  width: 800px;
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#newMessageForm,
+.messages,
+.signUpMessage {
+  width: 500px;
+}
+
+#newMessageForm,
+.signUpMessage {
+  margin-top: 40px;
+}
+
+.signUpMessage {
+  font-size: 1.1rem;
+  font-weight: 550;
+}
+
+#newMessageForm {
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+}
+
+.messages {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.messageContainer {
+  border: 1px solid #777;
+  padding: 8px 10px;
+}
+
+.message {
+  white-space: pre-wrap;
+}
+
+.username {
+  color: #777;
+}
+
+/* This code is taken from ->
+https://css-tricks.com/the-cleanest-trick-for-autogrowing-textareas/
+ */
+.grow-wrap {
+  /* easy way to plop the elements on top of each other and have them both sized based on the tallest one's height */
+  display: grid;
+  font-size: 1.2rem;
+}
+.grow-wrap::after {
+  /* Note the weird space! Needed to preventy jumpy behavior */
+  content: attr(data-replicated-value) ' ';
+
+  /* This is how textarea text behaves */
+  white-space: pre-wrap;
+
+  /* Hidden from view, clicks, and screen readers */
+  visibility: hidden;
+}
+
+.grow-wrap > textarea {
+  /* You could leave this, but after a user resizes, then it ruins the auto sizing */
+  resize: none;
+
+  /* Firefox shows scrollbar on growth, you can hide like this. */
+  overflow: hidden;
+  word-wrap: break-word;
+  background-color: inherit;
+  color: inherit;
+}
+.grow-wrap > textarea,
+.grow-wrap::after {
+  /* Identical styling required!! */
+  border: 1px solid #777;
+  padding: 0.5rem;
+  font: inherit;
+  outline: none;
+
+  /* Place on top of each other */
+  grid-area: 1 / 1 / 2 / 2;
+
+  /* word wrap */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-all;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+a {
+  text-decoration: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+button,
+input[type='submit'] {
+  cursor: pointer;
+}
+
+.submitMessage {
+  background-color: rgb(29 155 240);
+  color: white;
+  width: fit-content;
+  align-self: end;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 999px;
+  margin-top: 8px;
+}
+
+.logout {
+  align-self: end;
+}
+
+.loginContainer,
+.signupContainer {
+  margin-top: 30px;
+}
+
+.loginForm,
+.signupForm {
+  display: flex;
+  flex-direction: column;
+  width: 220px;
+  font-size: 1.2rem;
+
+  input {
+    margin-top: 2px;
+    margin-bottom: 10px;
+  }
+
+  .loginButton,
+  .signupButton {
+    margin-top: 10px;
+  }
+}
+
+.profileContainer {
+  display: flex;
+  flex-direction: column;
+
+  & .inputContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+  }
+}
+
+input[type='text'],
+input[type='password'] {
+  background-color: inherit;
+  color: inherit;
+  border: 1px solid #777;
+  font: inherit;
+  font-size: 1rem;
+  padding: 8px;
+}
+
+input[type='submit'] {
+  background-color: rgb(29 155 240);
+  color: white;
+  width: fit-content;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 999px;
+}

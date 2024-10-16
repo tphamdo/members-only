@@ -11,7 +11,6 @@ import pool from './db/pool';
 import path from 'path';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 if (!process.env.SESSION_SECRET) {
   throw Error('Session Secret must exist to continue');
@@ -45,6 +44,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use('/', indexRouter);
 app.use('*', (_req, res) => res.redirect('/'));
 
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

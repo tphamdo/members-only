@@ -4,9 +4,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
+    "build": "npx tsc && cp -r src/public/* dist/public/ && cp -r src/views/* dist/views/",
     "start": "node dist/app.js",
-    "dev": "node-dev src/app.ts"
+    "start:dev": "node-dev src/app.ts"
   },
   "keywords": [],
   "author": "",

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Members Only Club</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <div class="bodyContainer">
+    <%- include('partials/navbar') %>
+    <div class="contentContainer">
+      <% if (locals.isMember) { %>
+        <form method="POST" action="/newMessage" id="newMessageForm">
+          <div class="grow-wrap">
+            <textarea  maxlength="255" name="message" id="text" onInput="this.parentNode.dataset.replicatedValue = this.value" rows="1" placeholder="What is happening?!"></textarea>
+          </div>
+          <input type="submit" value="Post" class="submitMessage">
+        </form>
+      <% } else if (locals.isAuth) { %>
+        <div class="signUpMessage">Become a member to write to the message board and see who wrote these messages!</div>
+      <% } else { %>
+        <div class="signUpMessage">Sign up to write to the message board and see who wrote these messages!</div>
+      <% } %>
+      <% if (locals.messages) { %>
+        <div class="messages">
+        <% messages.forEach(message => { %>
+          <div class="messageContainer">
+            <% if (locals.isAuth && locals.isMember) { %>
+              <a href="/profile/<%= message.username %>">
+                <p class="username">@<%= message.username %></p>
+              </a>
+            <% } else { %>
+              <p class="username">@anon</p>
+            <% } %>
+            <div class="message"><%= message.message %></div>
+          </div>
+        <% }); %>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<nav style="display: flex; align-items: center; gap: 15px;">
+  <a href="/"><h1>Members Only Club</h1></a>
+  <% if (locals.username) { %>
+    <div class="profile" style="margin-left: auto; font-size: 1.4rem;">
+      <a href="/profile">@<%= username %></a>
+    </div>
+  <% } else { %>
+    <div class="login" style="margin-left: auto;">
+      <a href="/login">Login</a>
+    </div>
+    <div class="sign up">
+      <a href="/register">Register</a>
+    </div>
+  <% } %>
+</nav>

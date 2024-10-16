@@ -39,20 +39,11 @@ import './config/passport';
 
 app.use(passport.session());
 
-app.use((req, _res, next) => {
-  // debugging info
-  console.log('\n\n--------DEBUG----------');
-  console.log('session:', req.session);
-  console.log('user:', req.user);
-  console.log('isAuth:', req.isAuthenticated());
-  console.log('--------DEBUG----------\n\n');
-  next();
-});
-
 app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use('/', indexRouter);
+app.use('*', (_req, res) => res.redirect('/'));
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

@@ -5,9 +5,6 @@ import { genPassword } from '../lib/passwordUtils';
 export async function indexGet(req: Request, res: Response) {
   const messages = await db.getAllMessages();
   if (req.isAuthenticated && req.isAuthenticated()) {
-    console.log('here');
-    console.log(req.user);
-    console.log(req.user.username);
     res.render('index', {
       isAuth: true,
       isMember: req.user.member,
@@ -59,4 +56,34 @@ export async function newMessagePost(req: Request, res: Response) {
 
   await db.addMessage(req.user.id, req.body.message);
   res.redirect('/');
+}
+
+export async function profileGet(req: Request, res: Response) {
+  if (!req.isAuthenticated()) return res.redirect('/login');
+
+  const userMessages = await db.getUserMessages(req.user.id);
+
+  res.render('profile', {
+    username: req.user.username,
+    isMember: req.user.member,
+    messages: userMessages,
+    isOwnProfile: true,
+    profileUsername: req.user.username,
+  });
+}
+
+export async function profileUsernameGet(req: Request, res: Response) {
+  if (!req.isAuthenticated()) return res.redirect('/login');
+  if (!req.params.username || !req.user.member) return res.redirect('/');
+
+  const user = await db.getUser(req.params.username);
+  if (!user) return res.redirect('/');
+
+  const profileMessages = await db.getUserMessages(user.id);
+  res.render('profile', {
+    username: req.user.username,
+    isMember: req.user.member,
+    messages: profileMessages,
+    profileUsername: req.params.username,
+  });
 }

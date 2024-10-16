@@ -8,16 +8,12 @@ router.get('/', userController.indexGet);
 
 router.get('/login', (req, res) => {
   const errors = req.session.messages ? [...req.session.messages] : null;
-  console.log('rsm:', req.session.messages);
-  console.log('error:', errors);
   req.session.messages = undefined;
   res.render('login', { errors });
 });
 
 router.get('/register', (req, res) => {
   const errors = req.session.messages ? [...req.session.messages] : null;
-  console.log('rsm:', req.session.messages);
-  console.log('error:', errors);
   req.session.messages = undefined;
   res.render('register', { errors });
 });
@@ -49,15 +45,8 @@ router.post('/login', (req, res) => {
   )(req, res);
 });
 
-router.get('/profile', (req, res) => {
-  if (!req.isAuthenticated()) {
-    return res.redirect('/login');
-  }
-  res.render('profile', {
-    username: req.user.username,
-    isMember: req.user.member,
-  });
-});
+router.get('/profile', userController.profileGet);
+router.get('/profile/:username', userController.profileUsernameGet);
 
 router.post('/member', userController.memberPost);
 router.post('/newMessage', userController.newMessagePost);

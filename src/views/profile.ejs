@@ -8,25 +8,42 @@
   <body>
     <div class="bodyContainer">
       <%- include('partials/navbar') %>
-      <div class="profileContainer">
-        <a href="/logout" class="logout">Logout</a>
-        <div class="joinClubContainer">
-          <% if (locals.isMember) { %>
-          <p>Congrats! You are a member of our club</p>
-          <% } else { %>
-          <form method="POST" action='/member' autocomplete="off">
-            <label for="password">
-              <p>Enter the top secret password to become a member of our Club:<p>
-              <p><i>Hint: It's a 6 letter word that starts with <b>secre</b></i></p>
-            </label>
-            <div class="inputContainer">
-              <input type="text" name="password" />
-              <input type="submit" value="Submit" />
+      <% if (locals.isOwnProfile) { %>
+        <div class="profileContainer">
+          <a href="/logout" class="logout">Logout</a>
+            <div class="joinClubContainer">
+              <% if (locals.isMember) { %>
+              <p>Congrats! You are a member of our club</p>
+              <% } else { %>
+              <form method="POST" action='/member' autocomplete="off">
+                <label for="password">
+                  <p>Enter the top secret password to become a member of our Club:<p>
+                  <p><i>Hint: It's a 6 letter word that starts with <b>secre</b></i></p>
+                </label>
+                <div class="inputContainer">
+                  <input type="text" name="password" />
+                  <input type="submit" value="Submit" />
+                </div>
+              </form>
+              <% } %>
             </div>
-          </form>
-          <% } %>
         </div>
-      </div>
+      <% } %>
+      <% if (locals.profileUsername) {%>
+        <h3 style="margin-top: 40px; text-align: center">@<%= profileUsername %></h3>
+      <% } %>
+      <% if (locals.messages && locals.isMember) { %>
+        <div class="contentContainer">
+            <div class="messages">
+            <% messages.forEach(message => { %>
+              <div class="messageContainer">
+                <p class="username">@<%= message.username %></p>
+                <div class="message"><%= message.message %></div>
+              </div>
+            <% }); %>
+            </div>
+        </div>
+      <% } %>
     </div>
   </body>
 </html>

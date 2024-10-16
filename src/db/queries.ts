@@ -74,3 +74,16 @@ export async function getAllMessages() {
   const { rows } = await pool.query(SQL);
   return rows;
 }
+
+export async function getUserMessages(userId: number) {
+  const SQL = `
+    SELECT m.message, u.username, m.added FROM messages as m
+    INNER JOIN users as u
+    ON m.fromUserId = u.id
+    WHERE m.fromUserId = $1
+    ORDER BY m.added DESC;
+  `;
+
+  const { rows } = await pool.query(SQL, [userId]);
+  return rows;
+}

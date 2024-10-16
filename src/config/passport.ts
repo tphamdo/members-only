@@ -34,12 +34,10 @@ passport.use(
 
 // Serialize and deserialize user
 passport.serializeUser((user: User, done: Function) => {
-  console.debug('seralizing user');
   done(null, user.id);
 });
 
 passport.deserializeUser(async (userId: number, done: Function) => {
-  console.debug('deseralizing user');
   try {
     const user = await db.getUserById(userId);
     done(null, user);

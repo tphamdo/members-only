@@ -3,8 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <title>Members Only Club</title>
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
   <%- include('partials/navbar') %>
+  <form method="POST" action="/newMessage" id="newMessageForm" onsubmit="return copyContent()">
+    <textarea name="message" id="hiddenTextarea" style="display: none;"></textarea>
+    <div class="textareaElement" id="textareaElement" placeholder="What is happening?!" contenteditable></div>
+    <input type="submit" value="Submit" style="width: fit-content; align-self: end;">
+  </form>
+  <script>
+    function copyContent () {
+      document.getElementById("hiddenTextarea").value =
+        document.getElementById("textareaElement").innerHTML;
+      return true;
+    }
+  </script>
 </body>
 </html>

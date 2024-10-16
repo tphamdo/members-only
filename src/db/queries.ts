@@ -55,3 +55,12 @@ export async function makeMember(userId: number) {
 
   await pool.query(SQL, [userId]);
 }
+
+export async function addMessage(userId: number, message: string) {
+  const SQL = `
+    INSERT INTO messages (fromUserId, message, added)
+    VALUES ($1, $2, NOW());
+  `;
+
+  await pool.query(SQL, [userId, message]);
+}

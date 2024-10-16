@@ -6,7 +6,6 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
   if (req.isAuthenticated && req.isAuthenticated()) {
-    console.log('is auth');
     res.render('index', { username: req.user.username });
   } else {
     res.render('index');
@@ -28,18 +27,12 @@ router.get('/register', (req, res) => {
 router.post('/register', userController.registerUserPost);
 
 router.post('/login', [
-  (req, res, next: Function) => {
-    console.log('login post');
-    next();
-  },
   passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/login',
     failureMessage: true,
   }),
 ]);
-
-router.post('/member', userController.memberPost);
 
 router.get('/profile', (req, res) => {
   if (!req.isAuthenticated()) {
@@ -50,6 +43,9 @@ router.get('/profile', (req, res) => {
     isMember: req.user.member,
   });
 });
+
+router.post('/member', userController.memberPost);
+router.post('/newMessage', userController.newMessagePost);
 
 router.get('/logout', (req, res) => {
   req.logout(() => {

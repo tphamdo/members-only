@@ -31,12 +31,18 @@ export async function registerUserPost(req: Request, res: Response) {
 }
 
 export async function memberPost(req: Request, res: Response) {
-  console.log('---------memberPut----');
-  console.log(req.user);
-  console.log(req.body);
-  console.log('---------memberPut----');
   if (req.body.password && req.body.password === 'secret') {
-    db.makeMember(req.user.id);
+    await db.makeMember(req.user.id);
   }
   res.redirect('/profile');
+}
+
+export async function newMessagePost(req: Request, res: Response) {
+  if (!req.body.message || !req.user.id) return res.redirect('/');
+
+  console.log('NWP:', req.body.message);
+  console.log('NWP:', req.user.id);
+
+  await db.addMessage(req.user.id, req.body.message);
+  res.redirect('/');
 }

@@ -8,6 +8,13 @@ const SQL = `
   salt VARCHAR(255) NOT NULL,
   member BOOLEAN NOT NULL DEFAULT false,
   admin BOOLEAN NOT NULL DEFAULT false);
+
+  CREATE TABLE IF NOT EXISTS messages (
+    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    message VARCHAR(255) NOT NULL,
+    fromUserId VARCHAR(255) NOT NULL,
+    added TIMESTAMP NOT NULL
+  );
 `;
 
 async function main() {

@@ -67,7 +67,8 @@ export async function getAllMessages() {
   const SQL = `
     SELECT m.message, u.username, m.added FROM messages as m
     INNER JOIN users as u
-    ON m.fromUserId = u.id;
+    ON m.fromUserId = u.id
+    ORDER BY m.added DESC;
   `;
 
   const { rows } = await pool.query(SQL);

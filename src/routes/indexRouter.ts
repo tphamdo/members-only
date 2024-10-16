@@ -8,25 +8,46 @@ router.get('/', userController.indexGet);
 
 router.get('/login', (req, res) => {
   const errors = req.session.messages ? [...req.session.messages] : null;
+  console.log('rsm:', req.session.messages);
+  console.log('error:', errors);
   req.session.messages = undefined;
   res.render('login', { errors });
 });
 
 router.get('/register', (req, res) => {
   const errors = req.session.messages ? [...req.session.messages] : null;
+  console.log('rsm:', req.session.messages);
+  console.log('error:', errors);
   req.session.messages = undefined;
   res.render('register', { errors });
 });
 
 router.post('/register', userController.registerUserPost);
 
-router.post('/login', [
-  passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/login',
-    failureMessage: true,
-  }),
-]);
+router.post('/login', (req, res) => {
+  passport.authenticate(
+    'local',
+    {
+      failureMessage: true,
+    },
+    (err, user, info) => {
+      if (err || !user) {
+        // failureRedirect
+        if (info && info.message) {
+          req.session.messages = [info.message];
+        }
+        req.session.save((_err) => {
+          return res.redirect('/login');
+        });
+      } else {
+        // successRedirect
+        req.login(user, () => {
+          res.redirect('/');
+        });
+      }
+    },
+  )(req, res);
+});
 
 router.get('/profile', (req, res) => {
   if (!req.isAuthenticated()) {

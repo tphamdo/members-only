@@ -2,20 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Members Only</title>
+  <title>Members Only Club</title>
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-  <% if (locals.errors) { %>
-    <ul>
-    <% errors.map(error => { %>
-      <li><%= error %></li>
-    <% }); %>
-    </ul>
-  <% } %>
-  <form method="post" action="/login">
-    <div><label>Username:</label><input type="text" name="username" /></div>
-    <div><label>Password:</label><input type="password" name="password" /></div>
-    <div><button type="submit">Log In</button></div>
-  </form>
+  <div class="bodyContainer">
+    <%- include('partials/navbar') %>
+    <div class="loginContainer">
+      <% if (locals.errors && locals.errors.length > 0) { %>
+        <p class="error"><%= errors[0] %></p>
+      <% } %>
+      <form method="post" action="/login" class="loginForm" autocomplete="off">
+        <label>Username:</label>
+        <input type="text" name="username" />
+        <label>Password:</label><input type="password" name="password" />
+        <input type="submit" class="loginButton" value="Log In" />
+      </form>
+    </div>
+  </div>
 </body>
 </html>

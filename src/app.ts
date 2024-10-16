@@ -41,11 +41,11 @@ app.use(passport.session());
 
 app.use((req, _res, next) => {
   // debugging info
-  /* console.log('\n\n--------DEBUG----------');
+  console.log('\n\n--------DEBUG----------');
   console.log('session:', req.session);
   console.log('user:', req.user);
   console.log('isAuth:', req.isAuthenticated());
-  console.log('--------DEBUG----------\n\n'); */
+  console.log('--------DEBUG----------\n\n');
   next();
 });
 

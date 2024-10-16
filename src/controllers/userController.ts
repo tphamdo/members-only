@@ -2,6 +2,23 @@ import * as db from '../db/queries';
 import { Request, Response } from 'express';
 import { genPassword } from '../lib/passwordUtils';
 
+export async function indexGet(req: Request, res: Response) {
+  const messages = await db.getAllMessages();
+  if (req.isAuthenticated && req.isAuthenticated()) {
+    console.log('here');
+    console.log(req.user);
+    console.log(req.user.username);
+    res.render('index', {
+      isAuth: true,
+      isMember: req.user.member,
+      username: req.user.username,
+      messages,
+    });
+  } else {
+    res.render('index', { messages });
+  }
+}
+
 export async function registerUserPost(req: Request, res: Response) {
   if (!req.body.username || !req.body.password) res.redirect('/login');
 
@@ -21,7 +38,7 @@ export async function registerUserPost(req: Request, res: Response) {
         req.session.messages = [err.message];
         return res.redirect('/register');
       }
-      return res.redirect('/');
+      return res.redirect('/profile');
     });
   } catch (error) {
     console.error(error);
@@ -39,9 +56,6 @@ export async function memberPost(req: Request, res: Response) {
 
 export async function newMessagePost(req: Request, res: Response) {
   if (!req.body.message || !req.user.id) return res.redirect('/');
-
-  console.log('NWP:', req.body.message);
-  console.log('NWP:', req.user.id);
 
   await db.addMessage(req.user.id, req.body.message);
   res.redirect('/');

@@ -4,13 +4,7 @@ import * as userController from '../controllers/userController';
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  if (req.isAuthenticated && req.isAuthenticated()) {
-    res.render('index', { username: req.user.username });
-  } else {
-    res.render('index');
-  }
-});
+router.get('/', userController.indexGet);
 
 router.get('/login', (req, res) => {
   const errors = req.session.messages ? [...req.session.messages] : null;

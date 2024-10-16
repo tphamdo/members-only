@@ -14,8 +14,6 @@ export async function addUser(user: {
   if (existingUser) throw Error('That username already exists');
 
   const rows = await pool.query(SQL, [user.username, user.hash, user.salt]);
-  console.log('AU:', rows);
-  console.log('AU:', rows.rows);
 }
 
 export async function getUser(username: string) {
@@ -63,4 +61,15 @@ export async function addMessage(userId: number, message: string) {
   `;
 
   await pool.query(SQL, [userId, message]);
+}
+
+export async function getAllMessages() {
+  const SQL = `
+    SELECT m.message, u.username, m.added FROM messages as m
+    INNER JOIN users as u
+    ON m.fromUserId = u.id;
+  `;
+
+  const { rows } = await pool.query(SQL);
+  return rows;
 }
